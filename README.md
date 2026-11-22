@@ -51,8 +51,9 @@ an hour). `FAIL` and `ERROR` lines have also been sent as notifications.
 
 ## How a check works
 
-The workflow ([`.github/workflows/ping.yml`](.github/workflows/ping.yml)) runs
-at 17 minutes past every hour. For each processor, the check
+The workflow ([`.github/workflows/ping.yml`](.github/workflows/ping.yml)) is
+started at 7 minutes past every hour by a Cloudflare Worker (see
+[Hourly trigger](#hourly-trigger)). For each processor, the check
 ([`src/apps_ping/ping.py`](src/apps_ping/ping.py)):
 
 1. Finds the newest submission named `apps-ping-<processor>-<time>` and checks
@@ -95,6 +96,34 @@ final workflow step sends the notification instead.
 
 Set variables under **Settings > Secrets and variables > Actions**, or with
 `gh variable set APPS_PING_PROCESSORS --body "apps01ca,apps02xx"`.
+
+## Hourly trigger
+
+GitHub's `schedule` trigger is best effort and often skips runs, so a small
+Cloudflare Worker in [`dispatcher/`](dispatcher) starts the workflow at 7
+minutes past every hour through GitHub's `workflow_dispatch` API. If GitHub
+rejects the request (for example, because the token expired), the Worker sends
+an ntfy notification.
+
+The workflow's own schedule, at 17 past the hour, is kept as a backup. It
+stands down if the last line in `ping.log` is less than 40 minutes old.
+
+The Worker needs a `GITHUB_TOKEN` secret: a
+[fine-grained personal access token](https://github.com/settings/personal-access-tokens/new)
+limited to this repository, with **Actions: Read and write** permission. To set
+it up or change it:
+
+```bash
+cd dispatcher
+npm install
+npx wrangler login
+npx wrangler secret put GITHUB_TOKEN   # paste the token when prompted
+npx wrangler deploy
+```
+
+Logs are under **Workers & Pages > apps-ping-dispatcher > Logs** in the
+Cloudflare dashboard, or run `npx wrangler tail` from `dispatcher/`. When the
+token expires, create a new one and run `wrangler secret put` again.
 
 ## Running locally
 

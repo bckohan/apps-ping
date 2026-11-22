@@ -7,6 +7,10 @@ name: APPS Ping
 # delayed by GitHub under load. Every run appends a line per processor to
 # ping.log, re-renders the uptime images in uptime/ and commits them, which also keeps GitHub from disabling the schedule after 60
 # days of repository inactivity.
+#
+# The primary trigger is the Cloudflare Worker in dispatcher/, which starts
+# this workflow through workflow_dispatch at 7 past every hour. GitHub's own
+# schedule below is only a backup: it skips if a run already pinged recently.
 on:
   schedule:
     - cron: "17 * * * *"
@@ -29,7 +33,37 @@ env:
   PYTHONUNBUFFERED: "1"
 
 jobs:
+  # Scheduled (backup) runs stand down if the last ping was under 40 minutes ago.
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      run: ${{ steps.check.outputs.run }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: ping.log
+          sparse-checkout-cone-mode: false
+
+      - name: Check for a recent ping
+        id: check
+        run: |
+          run=true
+          if [ "$GITHUB_EVENT_NAME" = schedule ] && [ -s ping.log ]; then
+            last=$(tail -n1 ping.log | cut -d' ' -f1)
+            # an unparseable line counts as old, so the ping still runs
+            last_s=$(date -u -d "$last" +%s 2>/dev/null) || last_s=0
+            age=$(( $(date -u +%s) - last_s ))
+            if [ "$age" -lt 2400 ]; then
+              echo "Last ping was $((age / 60)) minutes ago; skipping." >> "$GITHUB_STEP_SUMMARY"
+              run=false
+            fi
+          fi
+          echo "run=$run" >> "$GITHUB_OUTPUT"
+
   ping:
+    needs: gate
+    if: needs.gate.outputs.run == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
