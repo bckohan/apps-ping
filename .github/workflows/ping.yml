@@ -1,0 +1,61 @@
+name: APPS Ping
+
+# Each run checks that the previous ping submission processed, then uploads a
+# new one and approves it (see src/apps_ping/ping.py). Problems are pushed to
+# ntfy.sh. Schedules run only from the default branch, are in UTC and may be
+# delayed by GitHub under load.
+on:
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Never run two pings at once, but don't cancel one mid-upload either.
+concurrency:
+  group: apps-ping
+  cancel-in-progress: false
+
+env:
+  NTFY_TOPIC: ${{ vars.NTFY_TOPIC || 'apps-ping-usn8' }}
+  PYTHONUNBUFFERED: "1"
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Install dependencies
+        run: uv sync --no-dev --locked
+
+      - name: Write APPS credential
+        env:
+          APPS_SETTINGS: ${{ secrets.APPS_SETTINGS }}
+        run: |
+          umask 077
+          printf '%s' "$APPS_SETTINGS" > "$RUNNER_TEMP/apps_settings"
+
+      - name: Ping APPS
+        id: ping
+        env:
+          APPS_SETTINGS_FILE: ${{ runner.temp }}/apps_settings
+        run: uv run --no-sync apps-ping data/usn83250.26o.gz
+
+      # Catches failures the ping script could not report itself (setup
+      # failures, a missing secret, etc).
+      - name: Notify on workflow failure
+        if: failure() && steps.ping.outputs.notified != 'true'
+        run: |
+          curl -fsS \
+            -H "Title: APPS ping workflow failed" \
+            -H "Tags: satellite,warning" \
+            -H "Priority: high" \
+            -H "Click: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            -d "The apps-ping GitHub workflow failed before it could report a result." \
+            "https://ntfy.sh/$NTFY_TOPIC"

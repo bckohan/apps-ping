@@ -11,7 +11,13 @@ readme = "README.md"
 repository = "https://github.com/bckohan/apps-ping"
 homepage = "https://github.com/bckohan/apps-ping"
 keywords = []
-dependencies = []
+dependencies = [
+    "gdgps-apps>=1.2.0b0",
+    "requests>=2.32.3",
+    # httpsig (a gdgps-apps dependency) imports pkg_resources, removed in setuptools 81
+    "setuptools<81",
+]
+
 classifiers = [
     "Operating System :: OS Independent",
     "Topic :: Software Development :: Libraries :: Python Modules",
@@ -24,12 +30,18 @@ classifiers = [
     "Topic :: Software Development :: Libraries",
 ]
 
+[project.scripts]
+apps-ping = "apps_ping.ping:main"
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.uv]
 package = true
+
+[tool.uv.sources]
+gdgps-apps = { path = "gdgps_apps-1.2.0b0-py3-none-any.whl" }
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/apps_ping"]
