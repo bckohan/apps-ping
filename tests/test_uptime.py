@@ -14,7 +14,7 @@ def at(day, hour=0):
 def test_cell_colors():
     assert Cell("x").color == "none"
     assert Cell("x", up=24, total=24).color == "green"
-    assert Cell("x", up=23, total=24).color == "green"  # 95.8%
+    assert Cell("x", up=23, total=24).color == "yellow"
     assert Cell("x", up=22, total=24).color == "yellow"  # 91.7%
     assert Cell("x", up=1, total=24).color == "yellow"
     assert Cell("x", up=0, total=24).color == "red"

@@ -28,8 +28,8 @@ red.
 
 | Color  | Meaning                                         |
 | ------ | ----------------------------------------------- |
-| Green  | at least 95% of the hourly checks succeeded     |
-| Yellow | some checks succeeded, but fewer than 95%       |
+| Green  | every check succeeded                           |
+| Yellow | some checks succeeded, but not all              |
 | Red    | every check failed                              |
 | Gray   | no checks ran                                   |
 

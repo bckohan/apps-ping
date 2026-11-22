@@ -9,8 +9,8 @@ Each image has three rows covering rolling windows that end now (UTC):
 
 A cell is
 
-* green if at least :data:`GREEN_AT` of the checks in it succeeded
-* yellow if some, but fewer than :data:`GREEN_AT`, succeeded
+* green if every check in it succeeded
+* yellow if some, but not all, succeeded
 * red if every check in it failed
 * gray if there were no checks in it
 
@@ -28,8 +28,6 @@ from html import escape
 from pathlib import Path
 
 from .ping import DEFAULT_PROCESSORS, LOG_TIME_FORMAT, parse_processors
-
-GREEN_AT = 0.95
 
 
 @dataclass(frozen=True)
@@ -78,7 +76,7 @@ class Cell:
         ratio = self.ratio
         if ratio is None:
             return "none"
-        if ratio >= GREEN_AT:
+        if ratio == 1:
             return "green"
         if ratio > 0:
             return "yellow"
