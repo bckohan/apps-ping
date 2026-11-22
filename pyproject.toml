@@ -1,0 +1,139 @@
+[project]
+name = "apps-ping"
+version = "0.1.0"
+description = "Ping apps periodically."
+requires-python = ">=3.15,<4.0"
+authors = [
+  {name = "Brian Kohan", email = "bkohan@jpl.nasa.gov"},
+]
+
+readme = "README.md"
+repository = "https://github.com/bckohan/apps-ping"
+homepage = "https://github.com/bckohan/apps-ping"
+keywords = []
+dependencies = []
+classifiers = [
+    "Operating System :: OS Independent",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Development Status :: 1 - Planning",
+    "Intended Audience :: Developers",
+
+    "Natural Language :: English",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.15",
+    "Topic :: Software Development :: Libraries",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv]
+package = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/apps_ping"]
+
+[project.urls]
+"Homepage"      = "https://github.com/bckohan/apps-ping"
+"Documentation" = "https://github.com/bckohan/apps-ping"
+"Repository"    = "https://github.com/bckohan/apps-ping"
+"Issues"        = "https://github.com/bckohan/apps-ping/issues"
+"Changelog"     = "https://github.com/bckohan/apps-ping/en/latest/changelog.html"
+
+[dependency-groups]
+docs = [
+    "doc8>=1.1.2",
+    "furo>=2024.8.6",
+    "readme-renderer[md]>=44.0",
+    "sphinx>=8.0.0",
+    "sphinx-autobuild>=2024.10.3",
+    "sphinx-tabs>=3.4.7",
+]
+typing = [
+    "pyright>=1.1.390",
+    "mypy>=1.19.1",
+]
+lint = [
+    "ruff>=0.15.0",
+    "readme-renderer[md]>=43.0",
+    "doc8>=1.1.2",
+    "bandit[toml,sarif]>=1.7.10"
+]
+coverage  = ["coverage[toml]>=7.6.1"]
+test = [
+    { include-group = "coverage" },
+    "pytest>=8.3.4",
+    "pytest-cov>=6.0.0",
+]
+dev = [
+    { include-group = "typing" },
+    { include-group = "test" },
+    { include-group = "docs" },
+    { include-group = "lint" },
+    "packaging>=24.2",
+    "tomlkit>=0.13.3",
+    "ipdb>=0.13.13",
+    "ipython>=8.18.1",
+]
+
+[tool.mypy]
+check_untyped_defs = true
+ignore_missing_imports = true
+mypy_path = ["src"]
+packages = ["apps_ping"]
+
+[tool.pyright]
+pythonVersion = "3.10"
+typeCheckingMode = "basic"
+include = ["src/apps_ping"]
+reportMissingImports = true
+reportMissingTypeStubs = false
+reportUnusedImport = true
+reportDuplicateImport = true
+
+[tool.doc8]
+max-line-length = 100
+sphinx = true
+
+[tool.pytest.ini_options]
+python_files = "test*.py"
+norecursedirs = "*.egg .eggs dist build docs .tox .git __pycache__"
+addopts = [
+    "--strict-markers",
+    "--cov=apps_ping",
+    "--cov-branch",
+    "--cov-report=term-missing:skip-covered",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["apps_ping"]
+concurrency = ["thread", "multiprocessing"]
+parallel = true
+relative_files = true
+command_line = "-m pytest --cov=apps_ping"
+
+[tool.coverage.paths]
+source = ["apps_ping"]
+
+[tool.ruff]
+line-length = 88
+exclude = ["doc", "dist"]
+target-version = "py310"
+
+[tool.ruff.lint]
+exclude = ["tests/**/*"]
+
+[tool.bandit]
+targets = ["src"]
+exclude_dirs = [
+    "./tests",
+    "./.venv",
+    "./doc",
+]
+
+skips = [
+    "B101",  # assert_used - assertions are fine in tests
+    "B110",  # Try, Except, Pass detected - these are intentional
+]
