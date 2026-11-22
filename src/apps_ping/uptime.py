@@ -1,7 +1,13 @@
 """
 Render uptime bars from ``ping.log`` as SVG images for the README.
 
-Each image has three rows: one cell per day, per week and per month. A cell is
+Each image has three rows covering rolling windows that end now (UTC):
+
+* Last Day: 24 cells, one per hour
+* Last Week: 14 cells, one per 12 hours
+* Last Month: 30 cells, one per day
+
+A cell is
 
 * green if at least :data:`GREEN_AT` of the checks in it succeeded
 * yellow if some, but fewer than :data:`GREEN_AT`, succeeded
@@ -17,7 +23,7 @@ import argparse
 import os
 import typing as t
 from dataclasses import dataclass
-from datetime import date, datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone
 from html import escape
 from pathlib import Path
 
@@ -25,9 +31,20 @@ from .ping import DEFAULT_PROCESSORS, LOG_TIME_FORMAT, parse_processors
 
 GREEN_AT = 0.95
 
-DAYS = 30
-WEEKS = 26
-MONTHS = 12
+
+@dataclass(frozen=True)
+class Row:
+    name: str
+    period: timedelta
+    cells: int
+    label_format: str
+
+
+ROWS = (
+    Row("Last Day", timedelta(hours=1), 24, "%Y-%m-%d %H:00"),
+    Row("Last Week", timedelta(hours=12), 14, "%Y-%m-%d %H:00"),
+    Row("Last Month", timedelta(days=1), 30, "%Y-%m-%d"),
+)
 
 COLORS = {
     "green": "#2da44e",
@@ -37,8 +54,6 @@ COLORS = {
 }
 
 SERVICE = "service"
-
-WINDOWS = {"Daily": f"{DAYS}d", "Weekly": f"{WEEKS}w", "Monthly": f"{MONTHS}mo"}
 
 
 @dataclass(frozen=True)
@@ -97,42 +112,36 @@ def service_checks(checks: list[Check], processors: list[str]) -> list[Check]:
     return [Check(when, SERVICE, up) for when, up in sorted(runs.items())]
 
 
-def week_start(day: date) -> date:
-    return day - timedelta(days=day.weekday())
+def period_start(when: datetime, period: timedelta) -> datetime:
+    """The start of the UTC-aligned period of the given length containing when."""
+    epoch = datetime(1970, 1, 1, tzinfo=timezone.utc)
+    return when - (when - epoch) % period
 
 
-def month_start(day: date) -> date:
-    return day.replace(day=1)
+def build_rows(checks: t.Iterable[Check], now: datetime) -> dict[str, list[Cell]]:
+    """Bucket checks into the cells of each row, oldest cell first."""
+    rows: dict[str, list[Cell]] = {}
+    firsts: dict[str, datetime] = {}
+    for row in ROWS:
+        last = period_start(now, row.period)
+        first = last - row.period * (row.cells - 1)
+        firsts[row.name] = first
+        rows[row.name] = []
+        for i in range(row.cells):
+            start = first + row.period * i
+            label = start.strftime(row.label_format)
+            if row.period < timedelta(days=1):
+                label += (start + row.period).strftime("-%H:00")
+            rows[row.name].append(Cell(f"{label} UTC"))
 
-
-def prev_month(day: date) -> date:
-    return (day - timedelta(days=1)).replace(day=1)
-
-
-def build_rows(checks: t.Iterable[Check], today: date) -> dict[str, list[Cell]]:
-    days = [today - timedelta(days=i) for i in reversed(range(DAYS))]
-    weeks = [week_start(today) - timedelta(weeks=i) for i in reversed(range(WEEKS))]
-    months = [month_start(today)]
-    while len(months) < MONTHS:
-        months.insert(0, prev_month(months[0]))
-
-    rows = {
-        "Daily": {d: Cell(d.isoformat()) for d in days},
-        "Weekly": {w: Cell(f"week of {w.isoformat()}") for w in weeks},
-        "Monthly": {m: Cell(m.strftime("%Y-%m")) for m in months},
-    }
-    keys: dict[str, t.Callable[[date], date]] = {
-        "Daily": lambda d: d,
-        "Weekly": week_start,
-        "Monthly": month_start,
-    }
     for check in checks:
-        day = check.time.date()
-        for name, cells in rows.items():
-            if cell := cells.get(keys[name](day)):
+        for row in ROWS:
+            idx = (check.time - firsts[row.name]) // row.period
+            if 0 <= idx < row.cells:
+                cell = rows[row.name][idx]
                 cell.total += 1
                 cell.up += check.up
-    return {name: list(cells.values()) for name, cells in rows.items()}
+    return rows
 
 
 def window_uptime(cells: list[Cell]) -> str:
@@ -142,7 +151,7 @@ def window_uptime(cells: list[Cell]) -> str:
 
 
 def render_svg(title: str, rows: dict[str, list[Cell]]) -> str:
-    label_w, bar_w, pct_w = 70, 480, 110
+    label_w, bar_w, pct_w = 80, 480, 70
     row_h, cell_h, gap = 22, 16, 2
     top = 26
     width = label_w + bar_w + pct_w
@@ -183,16 +192,16 @@ def render_svg(title: str, rows: dict[str, list[Cell]]) -> str:
             )
         out.append(
             f'<text x="{width}" y="{y + cell_h - 4}" font-size="12" '
-            f'text-anchor="end" {text}>{window_uptime(cells)} / {WINDOWS[name]}</text>'
+            f'text-anchor="end" {text}>{window_uptime(cells)}</text>'
         )
     out.append("</svg>")
     return "\n".join(out) + "\n"
 
 
 def render(
-    log: Path, out_dir: Path, processors: list[str], today: date | None = None
+    log: Path, out_dir: Path, processors: list[str], now: datetime | None = None
 ) -> list[Path]:
-    today = today or datetime.now(timezone.utc).date()
+    now = now or datetime.now(timezone.utc)
     checks = parse_log(log)
     out_dir.mkdir(parents=True, exist_ok=True)
     written = []
@@ -202,7 +211,7 @@ def render(
     ]
     for stem, title, subset in targets:
         path = out_dir / f"{stem}.svg"
-        path.write_text(render_svg(title, build_rows(subset, today)))
+        path.write_text(render_svg(title, build_rows(subset, now)))
         written.append(path)
     return written
 

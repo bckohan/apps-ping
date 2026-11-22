@@ -1,77 +1,77 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="660" height="96" viewBox="0 0 660 96" role="img" aria-label="APPS service uptime">
+<svg xmlns="http://www.w3.org/2000/svg" width="630" height="96" viewBox="0 0 630 96" role="img" aria-label="APPS service uptime">
 <text x="0" y="16" font-size="14" font-weight="600" fill="#8c959f" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">APPS service</text>
-<text x="0" y="38" font-size="12" fill="#8c959f" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">Daily</text>
-<rect x="70.00" y="26" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-10-24: no data</title></rect>
-<rect x="86.00" y="26" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-10-25: no data</title></rect>
-<rect x="102.00" y="26" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-10-26: no data</title></rect>
-<rect x="118.00" y="26" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-10-27: no data</title></rect>
-<rect x="134.00" y="26" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-10-28: no data</title></rect>
-<rect x="150.00" y="26" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-10-29: no data</title></rect>
-<rect x="166.00" y="26" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-10-30: no data</title></rect>
-<rect x="182.00" y="26" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-10-31: no data</title></rect>
-<rect x="198.00" y="26" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-01: no data</title></rect>
-<rect x="214.00" y="26" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-02: no data</title></rect>
-<rect x="230.00" y="26" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-03: no data</title></rect>
-<rect x="246.00" y="26" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-04: no data</title></rect>
-<rect x="262.00" y="26" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-05: no data</title></rect>
-<rect x="278.00" y="26" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-06: no data</title></rect>
-<rect x="294.00" y="26" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-07: no data</title></rect>
-<rect x="310.00" y="26" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-08: no data</title></rect>
-<rect x="326.00" y="26" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-09: no data</title></rect>
-<rect x="342.00" y="26" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-10: no data</title></rect>
-<rect x="358.00" y="26" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-11: no data</title></rect>
-<rect x="374.00" y="26" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-12: no data</title></rect>
-<rect x="390.00" y="26" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-13: no data</title></rect>
-<rect x="406.00" y="26" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-14: no data</title></rect>
-<rect x="422.00" y="26" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-15: no data</title></rect>
-<rect x="438.00" y="26" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-16: no data</title></rect>
-<rect x="454.00" y="26" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-17: no data</title></rect>
-<rect x="470.00" y="26" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-18: no data</title></rect>
-<rect x="486.00" y="26" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-19: no data</title></rect>
-<rect x="502.00" y="26" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-20: no data</title></rect>
-<rect x="518.00" y="26" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-21: no data</title></rect>
-<rect x="534.00" y="26" width="14.00" height="16" rx="2" fill="#2da44e"><title>2026-11-22: 100.0% (4/4)</title></rect>
-<text x="660" y="38" font-size="12" text-anchor="end" fill="#8c959f" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">100.0% / 30d</text>
-<text x="0" y="60" font-size="12" fill="#8c959f" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">Weekly</text>
-<rect x="70.00" y="48" width="16.46" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>week of 2026-05-25: no data</title></rect>
-<rect x="88.46" y="48" width="16.46" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>week of 2026-06-01: no data</title></rect>
-<rect x="106.92" y="48" width="16.46" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>week of 2026-06-08: no data</title></rect>
-<rect x="125.38" y="48" width="16.46" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>week of 2026-06-15: no data</title></rect>
-<rect x="143.85" y="48" width="16.46" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>week of 2026-06-22: no data</title></rect>
-<rect x="162.31" y="48" width="16.46" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>week of 2026-06-29: no data</title></rect>
-<rect x="180.77" y="48" width="16.46" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>week of 2026-07-06: no data</title></rect>
-<rect x="199.23" y="48" width="16.46" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>week of 2026-07-13: no data</title></rect>
-<rect x="217.69" y="48" width="16.46" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>week of 2026-07-20: no data</title></rect>
-<rect x="236.15" y="48" width="16.46" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>week of 2026-07-27: no data</title></rect>
-<rect x="254.62" y="48" width="16.46" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>week of 2026-08-03: no data</title></rect>
-<rect x="273.08" y="48" width="16.46" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>week of 2026-08-10: no data</title></rect>
-<rect x="291.54" y="48" width="16.46" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>week of 2026-08-17: no data</title></rect>
-<rect x="310.00" y="48" width="16.46" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>week of 2026-08-24: no data</title></rect>
-<rect x="328.46" y="48" width="16.46" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>week of 2026-08-31: no data</title></rect>
-<rect x="346.92" y="48" width="16.46" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>week of 2026-09-07: no data</title></rect>
-<rect x="365.38" y="48" width="16.46" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>week of 2026-09-14: no data</title></rect>
-<rect x="383.85" y="48" width="16.46" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>week of 2026-09-21: no data</title></rect>
-<rect x="402.31" y="48" width="16.46" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>week of 2026-09-28: no data</title></rect>
-<rect x="420.77" y="48" width="16.46" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>week of 2026-10-05: no data</title></rect>
-<rect x="439.23" y="48" width="16.46" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>week of 2026-10-12: no data</title></rect>
-<rect x="457.69" y="48" width="16.46" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>week of 2026-10-19: no data</title></rect>
-<rect x="476.15" y="48" width="16.46" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>week of 2026-10-26: no data</title></rect>
-<rect x="494.62" y="48" width="16.46" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>week of 2026-11-02: no data</title></rect>
-<rect x="513.08" y="48" width="16.46" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>week of 2026-11-09: no data</title></rect>
-<rect x="531.54" y="48" width="16.46" height="16" rx="2" fill="#2da44e"><title>week of 2026-11-16: 100.0% (4/4)</title></rect>
-<text x="660" y="60" font-size="12" text-anchor="end" fill="#8c959f" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">100.0% / 26w</text>
-<text x="0" y="82" font-size="12" fill="#8c959f" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">Monthly</text>
-<rect x="70.00" y="70" width="38.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2025-12: no data</title></rect>
-<rect x="110.00" y="70" width="38.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-01: no data</title></rect>
-<rect x="150.00" y="70" width="38.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-02: no data</title></rect>
-<rect x="190.00" y="70" width="38.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-03: no data</title></rect>
-<rect x="230.00" y="70" width="38.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-04: no data</title></rect>
-<rect x="270.00" y="70" width="38.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-05: no data</title></rect>
-<rect x="310.00" y="70" width="38.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-06: no data</title></rect>
-<rect x="350.00" y="70" width="38.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-07: no data</title></rect>
-<rect x="390.00" y="70" width="38.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-08: no data</title></rect>
-<rect x="430.00" y="70" width="38.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-09: no data</title></rect>
-<rect x="470.00" y="70" width="38.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-10: no data</title></rect>
-<rect x="510.00" y="70" width="38.00" height="16" rx="2" fill="#2da44e"><title>2026-11: 100.0% (4/4)</title></rect>
-<text x="660" y="82" font-size="12" text-anchor="end" fill="#8c959f" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">100.0% / 12mo</text>
+<text x="0" y="38" font-size="12" fill="#8c959f" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">Last Day</text>
+<rect x="80.00" y="26" width="18.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-21 18:00-19:00 UTC: no data</title></rect>
+<rect x="100.00" y="26" width="18.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-21 19:00-20:00 UTC: no data</title></rect>
+<rect x="120.00" y="26" width="18.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-21 20:00-21:00 UTC: no data</title></rect>
+<rect x="140.00" y="26" width="18.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-21 21:00-22:00 UTC: no data</title></rect>
+<rect x="160.00" y="26" width="18.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-21 22:00-23:00 UTC: no data</title></rect>
+<rect x="180.00" y="26" width="18.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-21 23:00-00:00 UTC: no data</title></rect>
+<rect x="200.00" y="26" width="18.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-22 00:00-01:00 UTC: no data</title></rect>
+<rect x="220.00" y="26" width="18.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-22 01:00-02:00 UTC: no data</title></rect>
+<rect x="240.00" y="26" width="18.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-22 02:00-03:00 UTC: no data</title></rect>
+<rect x="260.00" y="26" width="18.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-22 03:00-04:00 UTC: no data</title></rect>
+<rect x="280.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-22 04:00-05:00 UTC: 100.0% (1/1)</title></rect>
+<rect x="300.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-22 05:00-06:00 UTC: 100.0% (1/1)</title></rect>
+<rect x="320.00" y="26" width="18.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-22 06:00-07:00 UTC: no data</title></rect>
+<rect x="340.00" y="26" width="18.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-22 07:00-08:00 UTC: no data</title></rect>
+<rect x="360.00" y="26" width="18.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-22 08:00-09:00 UTC: no data</title></rect>
+<rect x="380.00" y="26" width="18.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-22 09:00-10:00 UTC: no data</title></rect>
+<rect x="400.00" y="26" width="18.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-22 10:00-11:00 UTC: no data</title></rect>
+<rect x="420.00" y="26" width="18.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-22 11:00-12:00 UTC: no data</title></rect>
+<rect x="440.00" y="26" width="18.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-22 12:00-13:00 UTC: no data</title></rect>
+<rect x="460.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-22 13:00-14:00 UTC: 100.0% (1/1)</title></rect>
+<rect x="480.00" y="26" width="18.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-22 14:00-15:00 UTC: no data</title></rect>
+<rect x="500.00" y="26" width="18.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-22 15:00-16:00 UTC: no data</title></rect>
+<rect x="520.00" y="26" width="18.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-22 16:00-17:00 UTC: no data</title></rect>
+<rect x="540.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-22 17:00-18:00 UTC: 100.0% (1/1)</title></rect>
+<text x="630" y="38" font-size="12" text-anchor="end" fill="#8c959f" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">100.0%</text>
+<text x="0" y="60" font-size="12" fill="#8c959f" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">Last Week</text>
+<rect x="80.00" y="48" width="32.29" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-16 00:00-12:00 UTC: no data</title></rect>
+<rect x="114.29" y="48" width="32.29" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-16 12:00-00:00 UTC: no data</title></rect>
+<rect x="148.57" y="48" width="32.29" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-17 00:00-12:00 UTC: no data</title></rect>
+<rect x="182.86" y="48" width="32.29" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-17 12:00-00:00 UTC: no data</title></rect>
+<rect x="217.14" y="48" width="32.29" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-18 00:00-12:00 UTC: no data</title></rect>
+<rect x="251.43" y="48" width="32.29" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-18 12:00-00:00 UTC: no data</title></rect>
+<rect x="285.71" y="48" width="32.29" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-19 00:00-12:00 UTC: no data</title></rect>
+<rect x="320.00" y="48" width="32.29" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-19 12:00-00:00 UTC: no data</title></rect>
+<rect x="354.29" y="48" width="32.29" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-20 00:00-12:00 UTC: no data</title></rect>
+<rect x="388.57" y="48" width="32.29" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-20 12:00-00:00 UTC: no data</title></rect>
+<rect x="422.86" y="48" width="32.29" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-21 00:00-12:00 UTC: no data</title></rect>
+<rect x="457.14" y="48" width="32.29" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-21 12:00-00:00 UTC: no data</title></rect>
+<rect x="491.43" y="48" width="32.29" height="16" rx="2" fill="#2da44e"><title>2026-11-22 00:00-12:00 UTC: 100.0% (2/2)</title></rect>
+<rect x="525.71" y="48" width="32.29" height="16" rx="2" fill="#2da44e"><title>2026-11-22 12:00-00:00 UTC: 100.0% (2/2)</title></rect>
+<text x="630" y="60" font-size="12" text-anchor="end" fill="#8c959f" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">100.0%</text>
+<text x="0" y="82" font-size="12" fill="#8c959f" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">Last Month</text>
+<rect x="80.00" y="70" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-10-24 UTC: no data</title></rect>
+<rect x="96.00" y="70" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-10-25 UTC: no data</title></rect>
+<rect x="112.00" y="70" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-10-26 UTC: no data</title></rect>
+<rect x="128.00" y="70" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-10-27 UTC: no data</title></rect>
+<rect x="144.00" y="70" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-10-28 UTC: no data</title></rect>
+<rect x="160.00" y="70" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-10-29 UTC: no data</title></rect>
+<rect x="176.00" y="70" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-10-30 UTC: no data</title></rect>
+<rect x="192.00" y="70" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-10-31 UTC: no data</title></rect>
+<rect x="208.00" y="70" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-01 UTC: no data</title></rect>
+<rect x="224.00" y="70" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-02 UTC: no data</title></rect>
+<rect x="240.00" y="70" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-03 UTC: no data</title></rect>
+<rect x="256.00" y="70" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-04 UTC: no data</title></rect>
+<rect x="272.00" y="70" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-05 UTC: no data</title></rect>
+<rect x="288.00" y="70" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-06 UTC: no data</title></rect>
+<rect x="304.00" y="70" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-07 UTC: no data</title></rect>
+<rect x="320.00" y="70" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-08 UTC: no data</title></rect>
+<rect x="336.00" y="70" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-09 UTC: no data</title></rect>
+<rect x="352.00" y="70" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-10 UTC: no data</title></rect>
+<rect x="368.00" y="70" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-11 UTC: no data</title></rect>
+<rect x="384.00" y="70" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-12 UTC: no data</title></rect>
+<rect x="400.00" y="70" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-13 UTC: no data</title></rect>
+<rect x="416.00" y="70" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-14 UTC: no data</title></rect>
+<rect x="432.00" y="70" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-15 UTC: no data</title></rect>
+<rect x="448.00" y="70" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-16 UTC: no data</title></rect>
+<rect x="464.00" y="70" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-17 UTC: no data</title></rect>
+<rect x="480.00" y="70" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-18 UTC: no data</title></rect>
+<rect x="496.00" y="70" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-19 UTC: no data</title></rect>
+<rect x="512.00" y="70" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-20 UTC: no data</title></rect>
+<rect x="528.00" y="70" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-21 UTC: no data</title></rect>
+<rect x="544.00" y="70" width="14.00" height="16" rx="2" fill="#2da44e"><title>2026-11-22 UTC: 100.0% (4/4)</title></rect>
+<text x="630" y="82" font-size="12" text-anchor="end" fill="#8c959f" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">100.0%</text>
 </svg>

@@ -13,10 +13,18 @@ notification through [ntfy](https://ntfy.sh).
 
 ## Reading the uptime bars
 
-Each image has three rows. Each cell in the **Daily** row is one UTC day, each
-cell in the **Weekly** row is one week (starting Monday), and each cell in the
-**Monthly** row is one calendar month. The number on the right of each row is
-the uptime across that whole row.
+Each image has three rows, each covering a rolling window that ends at the
+latest run (newest cell on the right, times in UTC):
+
+| Row        | Cells | Each cell is |
+| ---------- | ----- | ------------ |
+| Last Day   | 24    | one hour     |
+| Last Week  | 14    | 12 hours     |
+| Last Month | 30    | one day      |
+
+The number on the right of each row is the uptime across that whole row.
+Since there's one check an hour, a cell in the Last Day row is either green or
+red.
 
 | Color  | Meaning                                         |
 | ------ | ----------------------------------------------- |

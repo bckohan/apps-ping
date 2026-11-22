@@ -1,16 +1,14 @@
-from datetime import date, datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone
 from xml.etree import ElementTree
 
 from apps_ping import uptime
 from apps_ping.uptime import Cell, Check
 
-TODAY = date(2026, 11, 22)
+TODAY = datetime(2026, 11, 22, tzinfo=timezone.utc)
 
 
 def at(day, hour=0):
-    return datetime.combine(day, datetime.min.time(), timezone.utc) + timedelta(
-        hours=hour
-    )
+    return day + timedelta(hours=hour)
 
 
 def test_cell_colors():
@@ -52,26 +50,40 @@ def test_service_is_up_if_any_processor_is_up():
     assert [c.up for c in service] == [True, False, True]
 
 
+NOW = datetime(2026, 11, 22, 5, 30, tzinfo=timezone.utc)
+
+
 def test_build_rows_buckets():
-    checks = [Check(at(TODAY, h), "a", h != 0) for h in range(24)]
-    checks.append(Check(at(TODAY - timedelta(days=1)), "a", False))
-    checks.append(Check(at(date(2026, 1, 1)), "a", True))  # out of every window
-    rows = uptime.build_rows(checks, TODAY)
-    daily, weekly, monthly = rows["Daily"], rows["Weekly"], rows["Monthly"]
-    assert len(daily) == uptime.DAYS
-    assert len(weekly) == uptime.WEEKS
-    assert len(monthly) == uptime.MONTHS
-    assert (daily[-1].up, daily[-1].total) == (23, 24)
-    assert daily[-1].color == "green"
-    assert daily[-2].color == "red"
-    assert daily[0].color == "none"
-    # 2026-11-22 is a Sunday, so both days fall in the week of the 16th
-    assert weekly[-1].label == "week of 2026-11-16"
-    assert (weekly[-1].up, weekly[-1].total) == (23, 25)
-    assert weekly[-1].color == "yellow"
-    assert monthly[-1].label == "2026-11"
-    assert monthly[0].label == "2025-12"
-    assert monthly[-1].total == 25
+    checks = [
+        Check(NOW - timedelta(minutes=10), "a", True),  # 05:20, current hour
+        Check(NOW - timedelta(hours=1), "a", False),  # 04:30
+        Check(NOW - timedelta(hours=23), "a", True),  # 06:30 yesterday
+        Check(NOW - timedelta(hours=24), "a", True),  # 05:30 yesterday, too old
+        Check(NOW - timedelta(days=6, hours=12), "a", False),  # oldest 12h cell
+        Check(NOW - timedelta(days=29), "a", True),  # oldest day cell
+        Check(NOW - timedelta(days=31), "a", True),  # out of every window
+    ]
+    rows = uptime.build_rows(checks, NOW)
+    day, week, month = rows["Last Day"], rows["Last Week"], rows["Last Month"]
+    assert (len(day), len(week), len(month)) == (24, 14, 30)
+
+    assert day[-1].label == "2026-11-22 05:00-06:00 UTC"
+    assert (day[-1].up, day[-1].total) == (1, 1)
+    assert day[-2].color == "red"
+    assert day[0].label == "2026-11-21 06:00-07:00 UTC"
+    assert day[0].color == "green"
+    assert sum(c.total for c in day) == 3
+
+    assert week[-1].label == "2026-11-22 00:00-12:00 UTC"
+    assert (week[-1].up, week[-1].total) == (1, 2)
+    assert week[-1].color == "yellow"
+    assert week[0].label == "2026-11-15 12:00-00:00 UTC"
+    assert week[0].color == "red"
+
+    assert month[-1].label == "2026-11-22 UTC"
+    assert month[0].label == "2026-10-24 UTC"
+    assert month[0].color == "green"
+    assert sum(c.total for c in month) == 6
 
 
 def test_render_writes_valid_svgs(tmp_path):
@@ -79,11 +91,11 @@ def test_render_writes_valid_svgs(tmp_path):
     log.write_text(
         "2026-11-22T05:17:00Z apps01ca OK\n2026-11-22T05:17:00Z apps02 FAIL boom\n"
     )
-    written = uptime.render(log, tmp_path / "out", ["apps01ca", "apps02"], TODAY)
+    written = uptime.render(log, tmp_path / "out", ["apps01ca", "apps02"], NOW)
     assert [p.name for p in written] == ["service.svg", "apps01ca.svg", "apps02.svg"]
     for path in written:
         root = ElementTree.fromstring(path.read_text())
         rects = root.findall("{http://www.w3.org/2000/svg}rect")
-        assert len(rects) == uptime.DAYS + uptime.WEEKS + uptime.MONTHS
+        assert len(rects) == 24 + 14 + 30
     assert uptime.COLORS["green"] in written[0].read_text()
     assert uptime.COLORS["red"] in written[2].read_text()
