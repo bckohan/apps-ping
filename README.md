@@ -19,7 +19,7 @@ latest run (newest cell on the right, times in UTC):
 | Row        | Cells | Each cell is |
 | ---------- | ----- | ------------ |
 | Last Day   | 24    | one hour     |
-| Last Week  | 14    | 12 hours     |
+| Last Week  | 28    | 6 hours      |
 | Last Month | 30    | one day      |
 
 The number on the right of each row is the uptime across that whole row.

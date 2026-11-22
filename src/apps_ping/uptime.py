@@ -4,7 +4,7 @@ Render uptime bars from ``ping.log`` as SVG images for the README.
 Each image has three rows covering rolling windows that end now (UTC):
 
 * Last Day: 24 cells, one per hour
-* Last Week: 14 cells, one per 12 hours
+* Last Week: 28 cells, one per 6 hours
 * Last Month: 30 cells, one per day
 
 A cell is
@@ -40,7 +40,7 @@ class Row:
 
 ROWS = (
     Row("Last Day", timedelta(hours=1), 24, "%Y-%m-%d %H:00"),
-    Row("Last Week", timedelta(hours=12), 14, "%Y-%m-%d %H:00"),
+    Row("Last Week", timedelta(hours=6), 28, "%Y-%m-%d %H:00"),
     Row("Last Month", timedelta(days=1), 30, "%Y-%m-%d"),
 )
 

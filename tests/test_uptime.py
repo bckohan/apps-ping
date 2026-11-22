@@ -59,13 +59,13 @@ def test_build_rows_buckets():
         Check(NOW - timedelta(hours=1), "a", False),  # 04:30
         Check(NOW - timedelta(hours=23), "a", True),  # 06:30 yesterday
         Check(NOW - timedelta(hours=24), "a", True),  # 05:30 yesterday, too old
-        Check(NOW - timedelta(days=6, hours=12), "a", False),  # oldest 12h cell
+        Check(NOW - timedelta(days=6, hours=23), "a", False),  # oldest 6h cell
         Check(NOW - timedelta(days=29), "a", True),  # oldest day cell
         Check(NOW - timedelta(days=31), "a", True),  # out of every window
     ]
     rows = uptime.build_rows(checks, NOW)
     day, week, month = rows["Last Day"], rows["Last Week"], rows["Last Month"]
-    assert (len(day), len(week), len(month)) == (24, 14, 30)
+    assert (len(day), len(week), len(month)) == (24, 28, 30)
 
     assert day[-1].label == "2026-11-22 05:00-06:00 UTC"
     assert (day[-1].up, day[-1].total) == (1, 1)
@@ -74,10 +74,10 @@ def test_build_rows_buckets():
     assert day[0].color == "green"
     assert sum(c.total for c in day) == 3
 
-    assert week[-1].label == "2026-11-22 00:00-12:00 UTC"
+    assert week[-1].label == "2026-11-22 00:00-06:00 UTC"
     assert (week[-1].up, week[-1].total) == (1, 2)
     assert week[-1].color == "yellow"
-    assert week[0].label == "2026-11-15 12:00-00:00 UTC"
+    assert week[0].label == "2026-11-15 06:00-12:00 UTC"
     assert week[0].color == "red"
 
     assert month[-1].label == "2026-11-22 UTC"
@@ -96,6 +96,6 @@ def test_render_writes_valid_svgs(tmp_path):
     for path in written:
         root = ElementTree.fromstring(path.read_text())
         rects = root.findall("{http://www.w3.org/2000/svg}rect")
-        assert len(rects) == 24 + 14 + 30
+        assert len(rects) == 24 + 28 + 30
     assert uptime.COLORS["green"] in written[0].read_text()
     assert uptime.COLORS["red"] in written[2].read_text()
