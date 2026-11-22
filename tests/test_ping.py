@@ -13,18 +13,18 @@ NOW = datetime(2026, 11, 21, 12, 0, 0, tzinfo=timezone.utc)
 MAX_AGE = timedelta(minutes=60)
 VERIFY_TIMEOUT = timedelta(seconds=0.05)
 FILE = Path(__file__)
+PROC = "apps01ca"
 
 
-def name_at(minutes_ago):
-    return ping.PREFIX + (NOW - timedelta(minutes=minutes_ago)).strftime(
-        ping.NAME_TIME_FORMAT
-    )
+def name_at(minutes_ago, processor=PROC, now=NOW):
+    stamp = (now - timedelta(minutes=minutes_ago)).strftime(ping.NAME_TIME_FORMAT)
+    return f"{ping.PREFIX}{processor}-{stamp}"
 
 
-def sub(id, minutes_ago, state, flags=()):
+def sub(id, minutes_ago, state, flags=(), processor=PROC):
     return {
         "id": id,
-        "name": name_at(minutes_ago),
+        "name": name_at(minutes_ago, processor),
         "state": state,
         "flags": list(flags),
     }
@@ -43,14 +43,15 @@ class FakeAPPS:
         self.approved = []
         self.deleted = []
         self.upload_error = None
+        self.upload_errors = {}  # processor -> exception
         self.approve_ok = True
 
     def list_data(self, query=None):
         return list(self.data)
 
     def upload_gipsyx(self, file, **kwargs):
-        if self.upload_error:
-            raise self.upload_error
+        if err := self.upload_error or self.upload_errors.get(kwargs["processor"]):
+            raise err
         self.uploads.append(kwargs)
         return {"id": "new", "name": kwargs["name"], "state": self.upload_state}
 
@@ -70,8 +71,18 @@ class FakeAPPS:
         return True
 
 
-def run(apps):
-    ping.run(apps, FILE, MAX_AGE, VERIFY_TIMEOUT, now=NOW, poll_interval=0)
+def run(apps, processor=PROC):
+    pings = ping.pings_for(ping.list_pings(apps), processor)
+    ping.run(
+        apps,
+        FILE,
+        MAX_AGE,
+        VERIFY_TIMEOUT,
+        processor=processor,
+        pings=pings,
+        now=NOW,
+        poll_interval=0,
+    )
 
 
 def test_ignores_foreign_submissions_and_uploads_when_none():
@@ -80,7 +91,8 @@ def test_ignores_foreign_submissions_and_uploads_when_none():
         states=[Data.VERIFIED],
     )
     run(apps)
-    assert apps.uploads[0]["name"] == ping.PREFIX + "20261121T120000Z"
+    assert apps.uploads[0]["name"] == "apps-ping-apps01ca-20261121T120000Z"
+    assert apps.uploads[0]["processor"] == PROC
     assert apps.uploads[0]["email_notify"] is False
     assert apps.approved == ["new"]
     assert apps.deleted == []
@@ -173,6 +185,29 @@ def test_auto_approved_upload_is_fine():
     assert apps.approved == []
 
 
+def test_ping_name_parsing():
+    legacy = ping.Ping.from_data(
+        {"id": "a", "name": "apps-ping-20261121T120000Z", "location": "apps01ca"}
+    )
+    assert legacy and legacy.processor == "apps01ca"
+    assert legacy.uploaded == NOW
+    new = ping.Ping.from_data(
+        {"id": "b", "name": "apps-ping-apps02-x-20261121T120000Z (1)", "location": "z"}
+    )
+    assert new and new.processor == "apps02-x"
+    assert ping.Ping.from_data({"id": "c", "name": "apps-ping-foo"}) is None
+
+
+def test_other_processors_pings_are_ignored():
+    apps = FakeAPPS(
+        [sub("other", 10, Data.PROCESSING, processor="apps02")],
+        states=[Data.VERIFIED],
+    )
+    run(apps)
+    assert len(apps.uploads) == 1
+    assert apps.deleted == []
+
+
 def test_cleanup_keeps_newest_and_recent_errors():
     data = [sub("newest", 60, Data.AVAILABLE)]
     data += [sub(f"ok{i}", 120 + i, Data.AVAILABLE) for i in range(3)]
@@ -183,73 +218,107 @@ def test_cleanup_keeps_newest_and_recent_errors():
     assert sorted(apps.deleted) == ["err3", "err4", "ok0", "ok1", "ok2"]
 
 
-def test_main_notifies_on_problem(monkeypatch, tmp_path):
-    sent = []
-    monkeypatch.setattr(ping, "notify", lambda title, msg: sent.append(msg) or True)
-    monkeypatch.setattr(
-        ping, "APPS", lambda settings_file: FakeAPPS(states=[Data.ERROR])
-    )
+def main(monkeypatch, tmp_path, apps, *args, notified=None):
+    monkeypatch.setattr(ping, "APPS", lambda settings_file: apps)
     monkeypatch.setattr(ping.time, "sleep", lambda s: None)
+    sent = notified if notified is not None else []
+    monkeypatch.setattr(
+        ping, "notify", lambda title, msg: sent.append((title, msg)) or True
+    )
+    log = tmp_path / "ping.log"
+    code = ping.main([str(FILE), "--log", str(log), *args])
+    return code, log.read_text() if log.exists() else ""
+
+
+STAMP = r"\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ"
+
+
+def test_main_ok_logs_each_processor(monkeypatch, tmp_path):
+    sent = []
+    code, log = main(
+        monkeypatch,
+        tmp_path,
+        FakeAPPS(upload_state=Data.APPROVED),
+        "--processors",
+        "apps01ca, apps02",
+        notified=sent,
+    )
+    assert code == 0
+    assert sent == []
+    lines = log.splitlines()
+    assert re.fullmatch(rf"{STAMP} apps01ca OK", lines[0])
+    assert re.fullmatch(rf"{STAMP} apps02 OK", lines[1])
+    assert lines[0][:20] == lines[1][:20]
+
+
+def test_main_processors_from_env(monkeypatch, tmp_path):
+    monkeypatch.setenv("APPS_PING_PROCESSORS", "p1,p2")
+    apps = FakeAPPS(upload_state=Data.APPROVED)
+    code, log = main(monkeypatch, tmp_path, apps)
+    assert code == 0
+    assert [u["processor"] for u in apps.uploads] == ["p1", "p2"]
+
+
+def test_main_one_processor_down(monkeypatch, tmp_path):
+    sent = []
+    apps = FakeAPPS(upload_state=Data.APPROVED)
+    apps.upload_errors["apps02"] = RuntimeError("unreachable")
+    code, log = main(
+        monkeypatch, tmp_path, apps, "--processors", "apps01ca,apps02", notified=sent
+    )
+    assert code == 1
+    assert " apps01ca OK" in log
+    assert re.search(r" apps02 FAIL Upload of apps-ping-apps02-.* unreachable", log)
+    assert sent[0][0] == "APPS ping failed: apps02"
+    assert sent[0][1].startswith("[apps02] Upload of")
+
+
+def test_main_all_processors_down(monkeypatch, tmp_path):
+    sent = []
+    apps = FakeAPPS()
+    apps.upload_error = RuntimeError("unreachable")
+    code, _ = main(
+        monkeypatch, tmp_path, apps, "--processors", "apps01ca,apps02", notified=sent
+    )
+    assert code == 1
+    assert len(sent) == 1
+    assert sent[0][0] == "APPS service DOWN"
+    assert "[apps01ca]" in sent[0][1] and "[apps02]" in sent[0][1]
+
+
+def test_main_sets_notified_output(monkeypatch, tmp_path):
     out = tmp_path / "out"
     monkeypatch.setenv("GITHUB_OUTPUT", str(out))
-    assert ping.main([str(FILE), "--verify-timeout", "1"]) == 1
-    assert "failed verification" in sent[0]
+    code, log = main(monkeypatch, tmp_path, FakeAPPS(states=[Data.ERROR]))
+    assert code == 1
+    assert re.search(r" apps01ca FAIL Submission .* failed verification:\n$", log)
     assert out.read_text() == "notified=true\n"
 
 
-def test_main_notifies_on_unexpected_error(monkeypatch):
+def test_main_waiting_note(monkeypatch, tmp_path):
+    data = [
+        {
+            "id": "a",
+            "name": name_at(0, now=datetime.now(timezone.utc)),
+            "state": Data.PROCESSING,
+        }
+    ]
+    code, log = main(monkeypatch, tmp_path, FakeAPPS(data))
+    assert code == 0
+    assert log.endswith(" apps01ca OK previous ping still processing\n")
+
+
+def test_main_unexpected_error_marks_all_processors(monkeypatch, tmp_path):
     sent = []
-    monkeypatch.setattr(ping, "notify", lambda title, msg: sent.append(msg) or True)
-
-    def bad(settings_file):
-        raise ValueError("bad credential")
-
-    monkeypatch.setattr(ping, "APPS", bad)
-    assert ping.main([str(FILE)]) == 2
-    assert "bad credential" in sent[0]
-
-
-def test_main_writes_ok_log(monkeypatch, tmp_path):
-    monkeypatch.setattr(
-        ping, "APPS", lambda settings_file: FakeAPPS(upload_state=Data.APPROVED)
-    )
-    log = tmp_path / "ping.log"
-    log.write_text("2026-01-01T00:00:00Z OK\n")
-    assert ping.main([str(FILE), "--log", str(log)]) == 0
-    lines = log.read_text().splitlines()
-    assert len(lines) == 2
-    assert re.fullmatch(r"\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ OK", lines[1])
-
-
-def test_main_writes_waiting_note(monkeypatch, tmp_path):
-    now = datetime.now(timezone.utc).strftime(ping.NAME_TIME_FORMAT)
-    data = [{"id": "a", "name": ping.PREFIX + now, "state": Data.PROCESSING}]
-    monkeypatch.setattr(ping, "APPS", lambda settings_file: FakeAPPS(data))
-    log = tmp_path / "ping.log"
-    assert ping.main([str(FILE), "--log", str(log)]) == 0
-    assert log.read_text().endswith(" OK previous ping still processing\n")
-
-
-def test_main_writes_fail_log(monkeypatch, tmp_path):
-    monkeypatch.setattr(ping, "notify", lambda title, msg: True)
-    monkeypatch.setattr(
-        ping, "APPS", lambda settings_file: FakeAPPS(states=[Data.ERROR])
-    )
-    monkeypatch.setattr(ping.time, "sleep", lambda s: None)
-    log = tmp_path / "ping.log"
-    assert ping.main([str(FILE), "--log", str(log)]) == 1
-    assert re.search(
-        r"Z FAIL Submission apps-ping-.* failed verification:\n$", log.read_text()
-    )
-
-
-def test_main_writes_error_log(monkeypatch, tmp_path):
-    monkeypatch.setattr(ping, "notify", lambda title, msg: True)
+    monkeypatch.setattr(ping, "notify", lambda t, m: sent.append((t, m)) or True)
 
     def bad(settings_file):
         raise ValueError("bad\ncredential")
 
     monkeypatch.setattr(ping, "APPS", bad)
     log = tmp_path / "ping.log"
-    assert ping.main([str(FILE), "--log", str(log)]) == 2
-    assert log.read_text().endswith(" ERROR ValueError: bad credential\n")
+    assert ping.main([str(FILE), "--log", str(log), "--processors", "a,b"]) == 1
+    lines = log.read_text().splitlines()
+    assert lines[0].endswith(" a ERROR ValueError: bad")
+    assert lines[1].endswith(" b ERROR ValueError: bad")
+    assert sent[0][0] == "APPS service DOWN"

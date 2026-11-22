@@ -32,6 +32,7 @@ classifiers = [
 
 [project.scripts]
 apps-ping = "apps_ping.ping:main"
+apps-ping-uptime = "apps_ping.uptime:main"
 
 [build-system]
 requires = ["hatchling"]

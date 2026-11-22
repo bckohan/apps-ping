@@ -2,7 +2,9 @@
 Hourly end-to-end health check of the APPS PPP service.
 
 Each invocation is short and stateless; all state lives in APPS itself as
-submissions whose names start with :data:`PREFIX` and encode their upload time.
+submissions named ``apps-ping-<processor>-<upload time>``.
+
+Every configured processor is checked independently. For each one:
 
 1. Find the most recent ping submission and check it:
 
@@ -15,9 +17,11 @@ submissions whose names start with :data:`PREFIX` and encode their upload time.
 
 2. Delete old ping submissions so we stay under the account quota.
 
-3. Upload a fresh submission, wait for it to be verified and approve it. Any
-   failure here notifies immediately. Whether it processes is checked by the
-   next invocation.
+3. Upload a fresh submission to that processor, wait for it to be verified and
+   approve it. Any failure here notifies immediately. Whether it processes is
+   checked by the next invocation.
+
+All problems found in one invocation are sent as a single notification.
 """
 
 from __future__ import annotations
@@ -45,7 +49,13 @@ from gdgps_apps.exceptions import DataNotFound
 
 PREFIX = "apps-ping-"
 NAME_TIME_FORMAT = "%Y%m%dT%H%M%SZ"
-NAME_RE = re.compile(rf"^{re.escape(PREFIX)}(\d{{8}}T\d{{6}}Z)")
+# older pings had no processor in the name, those fall back to their location
+NAME_RE = re.compile(
+    rf"^{re.escape(PREFIX)}(?:(?P<processor>\S+?)-)?(?P<time>\d{{8}}T\d{{6}}Z)"
+)
+LOG_TIME_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
+
+DEFAULT_PROCESSORS = "apps01ca"
 
 NTFY_URL = "https://ntfy.sh"
 DEFAULT_NTFY_TOPIC = "apps-ping-usn8"
@@ -70,6 +80,7 @@ KEEP_ERRORED = 3
 class Ping:
     id: str
     name: str
+    processor: str | None
     uploaded: datetime
     state: str
     flags: list[dict[str, t.Any]]
@@ -82,7 +93,8 @@ class Ping:
         return cls(
             id=data["id"],
             name=data["name"],
-            uploaded=datetime.strptime(match.group(1), NAME_TIME_FORMAT).replace(
+            processor=match.group("processor") or data.get("location"),
+            uploaded=datetime.strptime(match.group("time"), NAME_TIME_FORMAT).replace(
                 tzinfo=timezone.utc
             ),
             state=data.get("state", ""),
@@ -151,6 +163,10 @@ def list_pings(apps: APPS) -> list[Ping]:
     # the server ignores filter{} queries, so filter client side
     pings = [p for d in apps.list_data() if (p := Ping.from_data(d))]
     return sorted(pings, key=lambda p: p.uploaded, reverse=True)
+
+
+def pings_for(pings: list[Ping], processor: str) -> list[Ping]:
+    return [p for p in pings if p.processor == processor]
 
 
 def check_previous(apps: APPS, prev: Ping, now: datetime, max_age: timedelta) -> bool:
@@ -231,21 +247,24 @@ def upload(
     file: Path,
     now: datetime,
     verify_timeout: timedelta,
+    processor: str,
     poll_interval: float = 15,
 ) -> None:
     """
-    Upload a new ping submission and approve it once verified.
+    Upload a new ping submission to the given processor and approve it once
+    verified.
 
     If verification does not finish within ``verify_timeout`` we exit quietly:
     the next run approves it or reports it as stuck.
 
     :raises PingProblem: if the upload, verification or approval fails
     """
-    name = f"{PREFIX}{now.strftime(NAME_TIME_FORMAT)}"
-    log(f"Uploading {file} as {name}.")
+    name = f"{PREFIX}{processor}-{now.strftime(NAME_TIME_FORMAT)}"
+    log(f"Uploading {file} to {processor} as {name}.")
     try:
         resp = apps.upload_gipsyx(
             str(file),
+            processor=processor,
             name=name,
             email_notify=False,
             processing_mode=GIPSYXData.STATIC,
@@ -295,17 +314,19 @@ def run(
     file: Path,
     max_age: timedelta,
     verify_timeout: timedelta,
+    processor: str,
+    pings: list[Ping],
     now: datetime | None = None,
     poll_interval: float = 15,
 ) -> str:
     """
-    Run one ping cycle.
+    Run one ping cycle against one processor.
 
+    :param pings: This processor's ping submissions, newest first.
     :return: A short note on what happened, empty if a new ping was uploaded.
     :raises PingProblem: on any condition the user should be notified of
     """
     now = now or datetime.now(timezone.utc)
-    pings = list_pings(apps)
     should_upload = True
     problem: PingProblem | None = None
     if pings:
@@ -322,7 +343,9 @@ def run(
 
     if should_upload:
         try:
-            upload(apps, file, now, verify_timeout, poll_interval=poll_interval)
+            upload(
+                apps, file, now, verify_timeout, processor, poll_interval=poll_interval
+            )
         except PingProblem as err:
             if problem is None:
                 raise
@@ -333,10 +356,12 @@ def run(
     return "" if should_upload else "previous ping still processing"
 
 
-def write_log(path: Path, now: datetime, status: str, note: str = "") -> None:
-    """Append a one line record of this run to the log file."""
+def write_log(
+    path: Path, now: datetime, processor: str, status: str, note: str = ""
+) -> None:
+    """Append a ``<timestamp> <processor> <status> [note]`` line to the log."""
     note = " ".join(note.split())  # keep it on one line
-    line = f"{now.strftime('%Y-%m-%dT%H:%M:%SZ')} {status}"
+    line = f"{now.strftime(LOG_TIME_FORMAT)} {processor} {status}"
     if note:
         line += f" {note[:200]}"
     with path.open("a") as out:
@@ -349,15 +374,30 @@ def set_output(key: str, value: str) -> None:
             out.write(f"{key}={value}\n")
 
 
+def parse_processors(value: str) -> list[str]:
+    return [p for p in re.split(r"[\s,]+", value) if p]
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
-        description="Check the last APPS ping submission and upload a new one."
+        description="Check the last APPS ping submissions and upload new ones."
     )
     parser.add_argument("file", type=Path, help="RINEX file to submit.")
     parser.add_argument(
         "--settings",
         default=os.environ.get("APPS_SETTINGS_FILE", "~/.apps_settings"),
         help="Path to the APPS credential file (env: APPS_SETTINGS_FILE).",
+    )
+    parser.add_argument(
+        "--processors",
+        type=parse_processors,
+        default=parse_processors(
+            os.environ.get("APPS_PING_PROCESSORS") or DEFAULT_PROCESSORS
+        ),
+        help=(
+            "Comma separated labels of the processors to ping "
+            f"(env: APPS_PING_PROCESSORS, default: {DEFAULT_PROCESSORS})."
+        ),
     )
     parser.add_argument(
         "--max-age",
@@ -375,43 +415,64 @@ def main(argv: list[str] | None = None) -> int:
         "--log",
         type=Path,
         default=None,
-        help="Append a '<timestamp> <status>' line for this run to this file.",
+        help="Append a '<timestamp> <processor> <status>' line per processor.",
     )
     args = parser.parse_args(argv)
+    if not args.processors:
+        parser.error("no processors configured")
     now = datetime.now(timezone.utc)
 
-    def record(status: str, note: str = "") -> None:
-        if args.log:
-            write_log(args.log, now, status, note)
+    # processor -> (status, note)
+    results: dict[str, tuple[str, str]] = {}
+
+    def unexpected(err: Exception) -> str:
+        log(traceback.format_exc())
+        return f"{type(err).__name__}: {err}"
 
     try:
         if not args.file.is_file():
             raise FileNotFoundError(args.file)
         apps = APPS(settings_file=os.path.expanduser(args.settings))
-        note = run(
-            apps,
-            args.file,
-            max_age=timedelta(minutes=args.max_age),
-            verify_timeout=timedelta(minutes=args.verify_timeout),
-            now=now,
-        )
-    except PingProblem as problem:
-        log(f"PROBLEM: {problem}")
-        record("FAIL", str(problem).splitlines()[0])
-        set_output("notified", str(notify("APPS ping failed", str(problem))).lower())
-        return 1
+        pings = list_pings(apps)
     except Exception as err:  # noqa: BLE001 - report anything unexpected
-        trace = traceback.format_exc()
-        log(trace)
-        record("ERROR", f"{type(err).__name__}: {err}")
-        set_output(
-            "notified",
-            str(notify("APPS ping error", f"{type(err).__name__}: {err}")).lower(),
-        )
-        return 2
-    log("OK")
-    record("OK", note)
-    return 0
+        msg = unexpected(err)
+        results = {proc: ("ERROR", msg) for proc in args.processors}
+    else:
+        for proc in args.processors:
+            log(f"--- {proc} ---")
+            try:
+                note = run(
+                    apps,
+                    args.file,
+                    max_age=timedelta(minutes=args.max_age),
+                    verify_timeout=timedelta(minutes=args.verify_timeout),
+                    processor=proc,
+                    pings=pings_for(pings, proc),
+                    now=now,
+                )
+                log("OK")
+                results[proc] = ("OK", note)
+            except PingProblem as problem:
+                log(f"PROBLEM: {problem}")
+                results[proc] = ("FAIL", str(problem))
+            except Exception as err:  # noqa: BLE001 - report anything unexpected
+                results[proc] = ("ERROR", unexpected(err))
+
+    if args.log:
+        for proc, (status, note) in results.items():
+            write_log(args.log, now, proc, status, note.split("\n")[0])
+
+    failed = {proc: res for proc, res in results.items() if res[0] != "OK"}
+    if not failed:
+        return 0
+
+    if len(failed) == len(results):
+        title = "APPS service DOWN"
+    else:
+        title = f"APPS ping failed: {', '.join(failed)}"
+    message = "\n\n".join(f"[{proc}] {note}" for proc, (_, note) in failed.items())
+    set_output("notified", str(notify(title, message)).lower())
+    return 1
 
 
 if __name__ == "__main__":
