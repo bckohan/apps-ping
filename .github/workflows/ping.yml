@@ -12,8 +12,9 @@ name: APPS Ping
 # this workflow through workflow_dispatch at 7 past every hour. GitHub's own
 # schedule below is only a backup: it skips if a run already pinged recently.
 on:
-  schedule:
-    - cron: "17 * * * *"
+  # the github scheduler is unreliable
+  # schedule:
+  #   - cron: "17 * * * *"
   workflow_dispatch:
 
 # Needed to commit ping.log back to main.
