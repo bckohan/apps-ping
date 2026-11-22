@@ -297,10 +297,11 @@ def run(
     verify_timeout: timedelta,
     now: datetime | None = None,
     poll_interval: float = 15,
-) -> None:
+) -> str:
     """
     Run one ping cycle.
 
+    :return: A short note on what happened, empty if a new ping was uploaded.
     :raises PingProblem: on any condition the user should be notified of
     """
     now = now or datetime.now(timezone.utc)
@@ -329,6 +330,17 @@ def run(
 
     if problem:
         raise problem
+    return "" if should_upload else "previous ping still processing"
+
+
+def write_log(path: Path, now: datetime, status: str, note: str = "") -> None:
+    """Append a one line record of this run to the log file."""
+    note = " ".join(note.split())  # keep it on one line
+    line = f"{now.strftime('%Y-%m-%dT%H:%M:%SZ')} {status}"
+    if note:
+        line += f" {note[:200]}"
+    with path.open("a") as out:
+        out.write(line + "\n")
 
 
 def set_output(key: str, value: str) -> None:
@@ -359,31 +371,46 @@ def main(argv: list[str] | None = None) -> int:
         default=10,
         help="Minutes to wait for a new upload to be verified.",
     )
+    parser.add_argument(
+        "--log",
+        type=Path,
+        default=None,
+        help="Append a '<timestamp> <status>' line for this run to this file.",
+    )
     args = parser.parse_args(argv)
+    now = datetime.now(timezone.utc)
+
+    def record(status: str, note: str = "") -> None:
+        if args.log:
+            write_log(args.log, now, status, note)
 
     try:
         if not args.file.is_file():
             raise FileNotFoundError(args.file)
         apps = APPS(settings_file=os.path.expanduser(args.settings))
-        run(
+        note = run(
             apps,
             args.file,
             max_age=timedelta(minutes=args.max_age),
             verify_timeout=timedelta(minutes=args.verify_timeout),
+            now=now,
         )
     except PingProblem as problem:
         log(f"PROBLEM: {problem}")
+        record("FAIL", str(problem).splitlines()[0])
         set_output("notified", str(notify("APPS ping failed", str(problem))).lower())
         return 1
     except Exception as err:  # noqa: BLE001 - report anything unexpected
         trace = traceback.format_exc()
         log(trace)
+        record("ERROR", f"{type(err).__name__}: {err}")
         set_output(
             "notified",
             str(notify("APPS ping error", f"{type(err).__name__}: {err}")).lower(),
         )
         return 2
     log("OK")
+    record("OK", note)
     return 0
 
 

@@ -1,3 +1,4 @@
+import re
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -206,3 +207,49 @@ def test_main_notifies_on_unexpected_error(monkeypatch):
     monkeypatch.setattr(ping, "APPS", bad)
     assert ping.main([str(FILE)]) == 2
     assert "bad credential" in sent[0]
+
+
+def test_main_writes_ok_log(monkeypatch, tmp_path):
+    monkeypatch.setattr(
+        ping, "APPS", lambda settings_file: FakeAPPS(upload_state=Data.APPROVED)
+    )
+    log = tmp_path / "ping.log"
+    log.write_text("2026-01-01T00:00:00Z OK\n")
+    assert ping.main([str(FILE), "--log", str(log)]) == 0
+    lines = log.read_text().splitlines()
+    assert len(lines) == 2
+    assert re.fullmatch(r"\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ OK", lines[1])
+
+
+def test_main_writes_waiting_note(monkeypatch, tmp_path):
+    now = datetime.now(timezone.utc).strftime(ping.NAME_TIME_FORMAT)
+    data = [{"id": "a", "name": ping.PREFIX + now, "state": Data.PROCESSING}]
+    monkeypatch.setattr(ping, "APPS", lambda settings_file: FakeAPPS(data))
+    log = tmp_path / "ping.log"
+    assert ping.main([str(FILE), "--log", str(log)]) == 0
+    assert log.read_text().endswith(" OK previous ping still processing\n")
+
+
+def test_main_writes_fail_log(monkeypatch, tmp_path):
+    monkeypatch.setattr(ping, "notify", lambda title, msg: True)
+    monkeypatch.setattr(
+        ping, "APPS", lambda settings_file: FakeAPPS(states=[Data.ERROR])
+    )
+    monkeypatch.setattr(ping.time, "sleep", lambda s: None)
+    log = tmp_path / "ping.log"
+    assert ping.main([str(FILE), "--log", str(log)]) == 1
+    assert re.search(
+        r"Z FAIL Submission apps-ping-.* failed verification:\n$", log.read_text()
+    )
+
+
+def test_main_writes_error_log(monkeypatch, tmp_path):
+    monkeypatch.setattr(ping, "notify", lambda title, msg: True)
+
+    def bad(settings_file):
+        raise ValueError("bad\ncredential")
+
+    monkeypatch.setattr(ping, "APPS", bad)
+    log = tmp_path / "ping.log"
+    assert ping.main([str(FILE), "--log", str(log)]) == 2
+    assert log.read_text().endswith(" ERROR ValueError: bad credential\n")

@@ -3,14 +3,17 @@ name: APPS Ping
 # Each run checks that the previous ping submission processed, then uploads a
 # new one and approves it (see src/apps_ping/ping.py). Problems are pushed to
 # ntfy.sh. Schedules run only from the default branch, are in UTC and may be
-# delayed by GitHub under load.
+# delayed by GitHub under load. Every run appends a line to ping.log and
+# commits it, which also keeps GitHub from disabling the schedule after 60
+# days of repository inactivity.
 on:
   schedule:
     - cron: "17 * * * *"
   workflow_dispatch:
 
+# Needed to commit ping.log back to main.
 permissions:
-  contents: read
+  contents: write
 
 # Never run two pings at once, but don't cancel one mid-upload either.
 concurrency:
@@ -45,7 +48,22 @@ jobs:
         id: ping
         env:
           APPS_SETTINGS_FILE: ${{ runner.temp }}/apps_settings
-        run: uv run --no-sync apps-ping data/usn83250.26o.gz
+        run: uv run --no-sync apps-ping data/usn83250.26o.gz --log ping.log
+
+      # Runs whether the ping passed or failed, as long as it wrote a line.
+      - name: Commit ping log
+        if: always() && hashFiles('ping.log') != ''
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add ping.log
+          git diff --cached --quiet && exit 0
+          git commit -q -m "ping: $(tail -n1 ping.log | cut -c1-72)"
+          for attempt in 1 2 3; do
+            git pull -q --rebase origin "$GITHUB_REF_NAME" && git push -q origin "HEAD:$GITHUB_REF_NAME" && exit 0
+            sleep 5
+          done
+          exit 1
 
       # Catches failures the ping script could not report itself (setup
       # failures, a missing secret, etc).
