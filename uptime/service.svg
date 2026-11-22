@@ -30,7 +30,7 @@
 <rect x="486.00" y="26" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-19: no data</title></rect>
 <rect x="502.00" y="26" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-20: no data</title></rect>
 <rect x="518.00" y="26" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-21: no data</title></rect>
-<rect x="534.00" y="26" width="14.00" height="16" rx="2" fill="#2da44e"><title>2026-11-22: 100.0% (2/2)</title></rect>
+<rect x="534.00" y="26" width="14.00" height="16" rx="2" fill="#2da44e"><title>2026-11-22: 100.0% (3/3)</title></rect>
 <text x="660" y="38" font-size="12" text-anchor="end" fill="#8c959f" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">100.0% / 30d</text>
 <text x="0" y="60" font-size="12" fill="#8c959f" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">Weekly</text>
 <rect x="70.00" y="48" width="16.46" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>week of 2026-05-25: no data</title></rect>
@@ -58,7 +58,7 @@
 <rect x="476.15" y="48" width="16.46" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>week of 2026-10-26: no data</title></rect>
 <rect x="494.62" y="48" width="16.46" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>week of 2026-11-02: no data</title></rect>
 <rect x="513.08" y="48" width="16.46" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>week of 2026-11-09: no data</title></rect>
-<rect x="531.54" y="48" width="16.46" height="16" rx="2" fill="#2da44e"><title>week of 2026-11-16: 100.0% (2/2)</title></rect>
+<rect x="531.54" y="48" width="16.46" height="16" rx="2" fill="#2da44e"><title>week of 2026-11-16: 100.0% (3/3)</title></rect>
 <text x="660" y="60" font-size="12" text-anchor="end" fill="#8c959f" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">100.0% / 26w</text>
 <text x="0" y="82" font-size="12" fill="#8c959f" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">Monthly</text>
 <rect x="70.00" y="70" width="38.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2025-12: no data</title></rect>
@@ -72,6 +72,6 @@
 <rect x="390.00" y="70" width="38.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-08: no data</title></rect>
 <rect x="430.00" y="70" width="38.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-09: no data</title></rect>
 <rect x="470.00" y="70" width="38.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-10: no data</title></rect>
-<rect x="510.00" y="70" width="38.00" height="16" rx="2" fill="#2da44e"><title>2026-11: 100.0% (2/2)</title></rect>
+<rect x="510.00" y="70" width="38.00" height="16" rx="2" fill="#2da44e"><title>2026-11: 100.0% (3/3)</title></rect>
 <text x="660" y="82" font-size="12" text-anchor="end" fill="#8c959f" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">100.0% / 12mo</text>
 </svg>
