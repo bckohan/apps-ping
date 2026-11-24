@@ -1,30 +1,30 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="630" height="96" viewBox="0 0 630 96" role="img" aria-label="APPS service uptime">
 <text x="0" y="16" font-size="14" font-weight="600" fill="#8c959f" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">APPS service</text>
 <text x="0" y="38" font-size="12" fill="#8c959f" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">Last Day</text>
-<rect x="80.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-23 15:00-16:00 UTC: 100.0% (1/1)</title></rect>
-<rect x="100.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-23 16:00-17:00 UTC: 100.0% (1/1)</title></rect>
-<rect x="120.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-23 17:00-18:00 UTC: 100.0% (1/1)</title></rect>
-<rect x="140.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-23 18:00-19:00 UTC: 100.0% (1/1)</title></rect>
-<rect x="160.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-23 19:00-20:00 UTC: 100.0% (1/1)</title></rect>
-<rect x="180.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-23 20:00-21:00 UTC: 100.0% (1/1)</title></rect>
-<rect x="200.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-23 21:00-22:00 UTC: 100.0% (1/1)</title></rect>
-<rect x="220.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-23 22:00-23:00 UTC: 100.0% (1/1)</title></rect>
-<rect x="240.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-23 23:00-00:00 UTC: 100.0% (1/1)</title></rect>
-<rect x="260.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-24 00:00-01:00 UTC: 100.0% (1/1)</title></rect>
-<rect x="280.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-24 01:00-02:00 UTC: 100.0% (1/1)</title></rect>
-<rect x="300.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-24 02:00-03:00 UTC: 100.0% (1/1)</title></rect>
-<rect x="320.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-24 03:00-04:00 UTC: 100.0% (1/1)</title></rect>
-<rect x="340.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-24 04:00-05:00 UTC: 100.0% (1/1)</title></rect>
-<rect x="360.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-24 05:00-06:00 UTC: 100.0% (1/1)</title></rect>
-<rect x="380.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-24 06:00-07:00 UTC: 100.0% (1/1)</title></rect>
-<rect x="400.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-24 07:00-08:00 UTC: 100.0% (1/1)</title></rect>
-<rect x="420.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-24 08:00-09:00 UTC: 100.0% (1/1)</title></rect>
-<rect x="440.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-24 09:00-10:00 UTC: 100.0% (1/1)</title></rect>
-<rect x="460.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-24 10:00-11:00 UTC: 100.0% (1/1)</title></rect>
-<rect x="480.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-24 11:00-12:00 UTC: 100.0% (1/1)</title></rect>
-<rect x="500.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-24 12:00-13:00 UTC: 100.0% (1/1)</title></rect>
-<rect x="520.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-24 13:00-14:00 UTC: 100.0% (1/1)</title></rect>
-<rect x="540.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-24 14:00-15:00 UTC: 100.0% (1/1)</title></rect>
+<rect x="80.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-23 16:00-17:00 UTC: 100.0% (1/1)</title></rect>
+<rect x="100.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-23 17:00-18:00 UTC: 100.0% (1/1)</title></rect>
+<rect x="120.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-23 18:00-19:00 UTC: 100.0% (1/1)</title></rect>
+<rect x="140.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-23 19:00-20:00 UTC: 100.0% (1/1)</title></rect>
+<rect x="160.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-23 20:00-21:00 UTC: 100.0% (1/1)</title></rect>
+<rect x="180.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-23 21:00-22:00 UTC: 100.0% (1/1)</title></rect>
+<rect x="200.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-23 22:00-23:00 UTC: 100.0% (1/1)</title></rect>
+<rect x="220.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-23 23:00-00:00 UTC: 100.0% (1/1)</title></rect>
+<rect x="240.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-24 00:00-01:00 UTC: 100.0% (1/1)</title></rect>
+<rect x="260.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-24 01:00-02:00 UTC: 100.0% (1/1)</title></rect>
+<rect x="280.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-24 02:00-03:00 UTC: 100.0% (1/1)</title></rect>
+<rect x="300.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-24 03:00-04:00 UTC: 100.0% (1/1)</title></rect>
+<rect x="320.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-24 04:00-05:00 UTC: 100.0% (1/1)</title></rect>
+<rect x="340.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-24 05:00-06:00 UTC: 100.0% (1/1)</title></rect>
+<rect x="360.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-24 06:00-07:00 UTC: 100.0% (1/1)</title></rect>
+<rect x="380.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-24 07:00-08:00 UTC: 100.0% (1/1)</title></rect>
+<rect x="400.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-24 08:00-09:00 UTC: 100.0% (1/1)</title></rect>
+<rect x="420.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-24 09:00-10:00 UTC: 100.0% (1/1)</title></rect>
+<rect x="440.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-24 10:00-11:00 UTC: 100.0% (1/1)</title></rect>
+<rect x="460.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-24 11:00-12:00 UTC: 100.0% (1/1)</title></rect>
+<rect x="480.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-24 12:00-13:00 UTC: 100.0% (1/1)</title></rect>
+<rect x="500.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-24 13:00-14:00 UTC: 100.0% (1/1)</title></rect>
+<rect x="520.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-24 14:00-15:00 UTC: 100.0% (1/1)</title></rect>
+<rect x="540.00" y="26" width="18.00" height="16" rx="2" fill="#2da44e"><title>2026-11-24 15:00-16:00 UTC: 100.0% (1/1)</title></rect>
 <text x="630" y="38" font-size="12" text-anchor="end" fill="#8c959f" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">100.0%</text>
 <text x="0" y="60" font-size="12" fill="#8c959f" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">Last Week</text>
 <rect x="80.00" y="48" width="15.14" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-17 18:00-00:00 UTC: no data</title></rect>
@@ -54,7 +54,7 @@
 <rect x="491.43" y="48" width="15.14" height="16" rx="2" fill="#2da44e"><title>2026-11-23 18:00-00:00 UTC: 100.0% (6/6)</title></rect>
 <rect x="508.57" y="48" width="15.14" height="16" rx="2" fill="#2da44e"><title>2026-11-24 00:00-06:00 UTC: 100.0% (6/6)</title></rect>
 <rect x="525.71" y="48" width="15.14" height="16" rx="2" fill="#2da44e"><title>2026-11-24 06:00-12:00 UTC: 100.0% (6/6)</title></rect>
-<rect x="542.86" y="48" width="15.14" height="16" rx="2" fill="#2da44e"><title>2026-11-24 12:00-18:00 UTC: 100.0% (3/3)</title></rect>
+<rect x="542.86" y="48" width="15.14" height="16" rx="2" fill="#2da44e"><title>2026-11-24 12:00-18:00 UTC: 100.0% (4/4)</title></rect>
 <text x="630" y="60" font-size="12" text-anchor="end" fill="#8c959f" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">100.0%</text>
 <text x="0" y="82" font-size="12" fill="#8c959f" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">Last Month</text>
 <rect x="80.00" y="70" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-10-26 UTC: no data</title></rect>
@@ -86,6 +86,6 @@
 <rect x="496.00" y="70" width="14.00" height="16" rx="2" fill="#8c959f" fill-opacity="0.25"><title>2026-11-21 UTC: no data</title></rect>
 <rect x="512.00" y="70" width="14.00" height="16" rx="2" fill="#2da44e"><title>2026-11-22 UTC: 100.0% (8/8)</title></rect>
 <rect x="528.00" y="70" width="14.00" height="16" rx="2" fill="#2da44e"><title>2026-11-23 UTC: 100.0% (24/24)</title></rect>
-<rect x="544.00" y="70" width="14.00" height="16" rx="2" fill="#2da44e"><title>2026-11-24 UTC: 100.0% (15/15)</title></rect>
+<rect x="544.00" y="70" width="14.00" height="16" rx="2" fill="#2da44e"><title>2026-11-24 UTC: 100.0% (16/16)</title></rect>
 <text x="630" y="82" font-size="12" text-anchor="end" fill="#8c959f" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">100.0%</text>
 </svg>
